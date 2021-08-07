@@ -1,12 +1,13 @@
-import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
+import GameBoard from './components/GameBoard';
+
+const sampleGameBoardParams = { cols: 5, rows: 4, bombs: 3 };
 
 export default function App() {
   return (
     <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
+      <GameBoard params={sampleGameBoardParams} />
     </View>
   );
 }
