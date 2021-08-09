@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import Tile from "./Tile";
 import { StyleSheet, View } from "react-native";
 
@@ -16,6 +16,7 @@ const Row = ({ row }: { row: any[] }) => (
 
 export default function GameBoard({ params }: GameBoardProps) {
   const [board, setBoard] = useState([] as any[][]);
+  const [bombsPlaced, setBombsPlaced] = useState(false);
   useEffect(() => {
     if (board.length === params.rows) return;
     for (let i = 0; i < params.rows; i++) {
@@ -25,6 +26,29 @@ export default function GameBoard({ params }: GameBoardProps) {
     }
     setBoard(board);
   }, []);
+
+  const placeBombs = useCallback((numBombs: number) => {
+    let bombsRemaining = numBombs;
+
+    while (bombsRemaining > 0) {
+      const randomColIndex = Math.floor(Math.random() * params.cols);
+      const randomRowIndex = Math.floor(Math.random() * params.rows);
+      let selectedTile = board[randomRowIndex][randomColIndex];
+      if (selectedTile !== "bomb") {
+        const selectedRow = board[randomRowIndex];
+        selectedRow.splice(randomColIndex, 1, "bomb");
+        board.splice(randomRowIndex, 1, selectedRow);
+        bombsRemaining -= 1;
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    if (board.length === params.rows && !bombsPlaced) {
+      placeBombs(params.bombs);
+      setBombsPlaced(true);
+    }
+  }, [board.length]);
 
   return (
     <View>
