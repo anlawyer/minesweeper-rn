@@ -11,8 +11,11 @@ export default function Tile({ open, content }: TileProps) {
     if (open) return;
   };
   return (
-    <TouchableOpacity style={styles.tile} onPress={handlePress}>
-      <Text>{open ? content : <React.Fragment />}</Text>
+    <TouchableOpacity
+      style={open ? { ...styles.tile, ...styles.tileOpen } : styles.tile}
+      onPress={handlePress}
+    >
+      <Text style={styles.content}>{open ? content : <React.Fragment />}</Text>
     </TouchableOpacity>
   );
 }
@@ -23,5 +26,15 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     height: 45,
     width: 45,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#e2e2e2",
+  },
+  tileOpen: {
+    backgroundColor: "#c4c4c4",
+  },
+  content: {
+    fontSize: 22,
   },
 });
