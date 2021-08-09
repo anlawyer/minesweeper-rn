@@ -3,7 +3,6 @@
 ### TODOs
 
 - [ ] Make sure game generates on app load (first with static sample data, then possibly with user's input)
-- [ ] Place correct number of 'bomb' tiles randomly
 - [ ] Calculate/determine non-bomb tiles' content
   - [ ] For each tile, generate coordinates of neighbors
     - [ ] A given tile's "neighbor" is any [row, column] pair that the tile touches top, bottom, left, right and diagonally
