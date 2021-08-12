@@ -4,16 +4,14 @@ import { StyleSheet, Text, TouchableOpacity } from "react-native";
 interface TileProps {
   open: boolean;
   content: number | "bomb";
+  onPress: () => void;
 }
 
-export default function Tile({ open, content }: TileProps) {
-  const handlePress = () => {
-    if (open) return;
-  };
+export default function Tile({ open, content, onPress }: TileProps) {
   return (
     <TouchableOpacity
       style={open ? { ...styles.tile, ...styles.tileOpen } : styles.tile}
-      onPress={handlePress}
+      onPress={onPress}
     >
       <Text style={styles.content}>{open ? content : <React.Fragment />}</Text>
     </TouchableOpacity>
@@ -24,8 +22,8 @@ const styles = StyleSheet.create({
   tile: {
     borderColor: "#888",
     borderWidth: 1,
-    height: 45,
-    width: 45,
+    height: 65,
+    width: 65,
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
@@ -35,6 +33,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#c4c4c4",
   },
   content: {
-    fontSize: 22,
+    fontSize: 24,
   },
 });
