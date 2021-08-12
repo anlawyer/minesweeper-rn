@@ -21,14 +21,12 @@ const defaultTile = {
 
 const getTile = (array: any[][], rowIndex: number, colIndex: number) => {
   // NOTE: inspired by https://kozmicluis.com/adjacent-cells-of-a-matrix/
-  var NO_VALUE = null;
-  var value, hasValue;
-
+  let value, hasValue;
   try {
     hasValue = array[rowIndex][colIndex] !== undefined;
-    value = hasValue ? array[rowIndex][colIndex] : NO_VALUE;
+    value = hasValue ? array[rowIndex][colIndex] : null;
   } catch (e) {
-    value = NO_VALUE;
+    value = null;
   }
 
   return value;
@@ -63,10 +61,12 @@ export default function GameBoard({ params }: GameBoardProps) {
       const randomRowIndex = Math.floor(Math.random() * params.rows);
       let selectedTile = getTile(board, randomRowIndex, randomColIndex);
       if (selectedTile.content !== "bomb") {
-        const selectedRow = board[randomRowIndex];
-        const updatedTile = setTileContent(selectedTile, { content: "bomb" });
-        selectedRow.splice(randomColIndex, 1, updatedTile);
-        board.splice(randomRowIndex, 1, selectedRow);
+        const updatedTile = setTileContent(selectedTile, {
+          content: "bomb",
+          neighbors: selectedTile.neighbors,
+        });
+        board[randomRowIndex][randomColIndex] = updatedTile;
+
         bombsRemaining -= 1;
       }
     }
@@ -84,8 +84,11 @@ export default function GameBoard({ params }: GameBoardProps) {
       upLeft: getTile(board, r - 1, c - 1),
     };
     const tile = getTile(board, r, c);
-    const selectedRow = board[r];
-    const updatedTile = setTileContent(tile, { neighbors });
+    const updatedTile = setTileContent(tile, {
+      content: tile.content,
+      neighbors,
+    });
+    return updatedTile;
   };
 
   const setAllNeighbors = () => {
@@ -100,8 +103,8 @@ export default function GameBoard({ params }: GameBoardProps) {
   useEffect(() => {
     if (board.length === params.rows && !bombsPlaced) {
       placeBombs(params.bombs);
-      setAllNeighbors();
       setBombsPlaced(true);
+      setAllNeighbors();
     }
   }, [board.length]);
 
